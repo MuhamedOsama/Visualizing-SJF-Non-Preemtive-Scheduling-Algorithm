@@ -5,25 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="assets/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <title>Document</title>
 </head>
 <style>
-#body{
+#content{
     position: absolute;
       top: 50%;
       left: 50%;
       margin-right: -50%;
-      transform: translate(-50%, -50%)
+      transform: translate(-50%, -50%);
 }
+#tableBox{
+  padding: 35px;
+}
+
 </style>
 <body>
-  <div class="container" id="body">
-    <table class="striped centered">
-      <thead>
+  <div class="container card" id="content">
+    <div id="tableBox">
+      <table class="striped centered" style="padding:5px;">
+      <thead class="divider">
         <tr>
-          <th>Process</th>
-          <th>Arrived Time</th>
-          <th>Burst Time</th>
+          <th><div><i class="material-icons">assignment</i></div>Process</th>
+          <th ><div><i class="material-icons md-24">schedule</i></div> Arrived Time</th>
+          <th><div><i class="material-icons">settings</i></div> Burst Time</th>
+          <th><div><i class="material-icons">assignment_turned_in</i></div> Progress</th>
         </tr>
       </thead>
       <tbody>
@@ -31,26 +38,47 @@
           <td>p1</td>
           <td>0</td>
           <td>5</td>
+          <td class="progress">
+                  <div class="determinate" style="width: 70%"></div>
+          </td>
         </tr>
         <tr>
-          <td>p1</td>
+          <td>p2</td>
           <td>3</td>
           <td>8</td>
+          <td class="progress">
+              <div class="determinate" style="width: 30%"></div>
+      </td>
         </tr>
         <tr>
-          <td>p1</td>
+          <td>p3</td>
           <td>3</td>
           <td>9</td>
+          <td class="progress">
+              <div class="determinate" style="width: 55%"></div>
+      </td>
         </tr>
         <tr>
-          <td>p1</td>
+          <td>p4</td>
           <td>9</td>
           <td>2</td>
+          <td class="progress">
+              <div class="determinate" style="width: 20%"></div>
+      </td>
         </tr>
-
+        <tr>
+            <td>p5</td>
+            <td>9</td>
+            <td>2</td>
+            <td class="progress">
+                <div class="determinate" style="width: 80%"></div>
+        </td>
+          </tr>
       </tbody>
     </table>
-  </div>
+    </div>
+    
+  
 
 </body>
 </html>
