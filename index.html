@@ -55,7 +55,7 @@
             </div>
             <div class="col s4">
                 <div class="col s4 input-field">
-                    <button class="btn btn-large" onclick="AddProcess()" type="button">Add</button>
+                    <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled = "true">Add</button>
                   </div>
                   <div class="col s4 input-field">
                       <button class="btn btn-large red" type="submit" >Clear</button>
@@ -74,14 +74,31 @@
   let processes = [],
   processNumber = 0
   const burstTimeField = document.querySelector('#burst_time'),
-       arrivedTimeField = document.querySelector('#arrived_time')
+       arrivedTimeField = document.querySelector('#arrived_time'),
+       addbtn = document.getElementById('addbtn')
   burstTimeField.addEventListener('input',(e)=>{
     const message = document.querySelector('#burst_time_message')
-    isNaN(e.srcElement.value) ? message.textContent = "Not a Number": message.textContent = ''
+    
+    if(isNaN(e.srcElement.value)){
+      message.textContent = "Not a Number"
+      addbtn.disabled = true
+    }else {
+      message.textContent = ''
+      addbtn.disabled = false
+    }
+    e.srcElement.value?'':addbtn.disabled=true;
   })
   arrivedTimeField.addEventListener('input',(e)=>{
     const message = document.querySelector('#arrived_time_message')
-    isNaN(e.srcElement.value) ? message.textContent = "Not a Number": message.textContent = ''
+    e.srcElement.value && isNaN(e.srcElement.value) ? message.textContent = "Not a Number": message.textContent = ''
+    if(isNaN(e.srcElement.value)){
+      message.textContent = "Not a Number"
+      addbtn.disabled = true
+    }else {
+      message.textContent = ''
+      addbtn.disabled = false
+    }
+    e.srcElement.value?'':addbtn.disabled=true;
   })
      AddProcess = () =>{
     const burstTime =burstTimeField.value,
