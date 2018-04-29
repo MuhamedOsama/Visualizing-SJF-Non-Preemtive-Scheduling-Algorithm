@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,128 +10,84 @@
   <title>Document</title>
 </head>
 <style>
-#content{
+  #content {
     position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-right: -50%;
-      transform: translate(-50%, -50%);
-}
-#tableBox{
-  padding: 35px;
-}
-#inputBox{
-  margin-top: 10px;
-}
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #tableBox {
+    padding: 35px;
+  }
+
+  #inputBox {
+    margin-top: 10px;
+  }
 </style>
+
 <body>
   <div class="container" id="content">
     <div id="tableBox" class="z-depth-3">
       <table class="striped centered" style="padding:5px;">
-      <thead class="divider">
-        <tr>
-          <th><div><i class="material-icons">assignment</i></div>Process</th>
-          <th ><div><i class="material-icons md-24">schedule</i></div> Arrived Time</th>
-          <th><div><i class="material-icons">settings</i></div> Burst Time</th>
-          <th><div><i class="material-icons">assignment_turned_in</i></div> Progress</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-      </tbody>
-    </table>
+        <thead class="divider">
+          <tr>
+            <th>
+              <div>
+                <i class="material-icons">assignment</i>
+              </div>Process</th>
+            <th>
+              <div>
+                <i class="material-icons md-24">schedule</i>
+              </div> Arrived Time</th>
+            <th>
+              <div>
+                <i class="material-icons">settings</i>
+              </div> Burst Time</th>
+            <th>
+              <div>
+                <i class="material-icons">assignment_turned_in</i>
+              </div> Progress</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
     </div>
-    <div class="row z-depth-3"  id="inputBox" >
-        <form class="col s12" id="form">
-            
-            <div class="col s4 input-field">
-                <label for="burst_time">Burst Time</label>
-                    <input id="burst_time" type="text" required class="validate">
-                    <span class="helper-text" id="burst_time_message"></span>
-            </div>
-            <div class="col s4 input-field">
-                <label for="arrived_time">arrived time</label>
-                    <input id="arrived_time" type="text" required class="validate">
-                    <span class="helper-text" id="arrived_time_message"></span>
-            </div>
-            <div class="col s4">
-                <div class="col s4 input-field">
-                    <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled = "true">Add</button>
-                  </div>
-                  <div class="col s4 input-field">
-                      <button class="btn btn-large red" type="submit" onclick="ClearProcess()">Clear</button>
-                    </div>
-                    <div class="col s4 input-field">
-                        <button class="btn btn-large blue"  type="button">Start</button>
-                      </div>
-            </div>
-            
-          </form> 
+    <div class="row z-depth-3" id="inputBox">
+      <form class="col s12" id="form">
+
+        <div class="col s4 input-field">
+          <label for="burst_time">Burst Time</label>
+          <input id="burst_time" type="text" required class="validate">
+          <span class="helper-text" id="burst_time_message"></span>
+        </div>
+        <div class="col s4 input-field">
+          <label for="arrived_time">arrived time</label>
+          <input id="arrived_time" type="text" required class="validate">
+          <span class="helper-text" id="arrived_time_message"></span>
+        </div>
+        <div class="col s4">
+          <div class="col s4 input-field">
+            <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled="true">Add</button>
+          </div>
+          <div class="col s4 input-field">
+            <button class="btn btn-large red" type="submit" onclick="ClearProcess()">Clear</button>
+          </div>
+          <div class="col s4 input-field">
+            <button class="btn btn-large blue" type="button">Start</button>
+            <!--NO IMPLEMENTATION DONE HERE FOR THIS BUTTON -->
+          </div>
+        </div>
+
+      </form>
     </div>
-     
+
 </body>
 <script src="assets/materialize.min.js"></script>
-<script>
-  let processes = [],
-  processNumber = 0
-  const burstTimeField = document.querySelector('#burst_time'),
-       arrivedTimeField = document.querySelector('#arrived_time'),
-       addbtn = document.getElementById('addbtn')
-  burstTimeField.addEventListener('input',(e)=>{
-    const message = document.querySelector('#burst_time_message')
-    
-    if(isNaN(e.srcElement.value)){
-      message.textContent = "Not a Number"
-      addbtn.disabled = true
-    }else {
-      message.textContent = ''
-      addbtn.disabled = false
-    }
-    e.srcElement.value?'':addbtn.disabled=true;
-  })
-  arrivedTimeField.addEventListener('input',(e)=>{
-    const message = document.querySelector('#arrived_time_message')
-    e.srcElement.value && isNaN(e.srcElement.value) ? message.textContent = "Not a Number": message.textContent = ''
-    if(isNaN(e.srcElement.value)){
-      message.textContent = "Not a Number"
-      addbtn.disabled = true
-    }else {
-      message.textContent = ''
-      addbtn.disabled = false
-    }
-    e.srcElement.value?'':addbtn.disabled=true;
-  })
-     AddProcess = () =>{
-    const burstTime =burstTimeField.value,
-          arrivedTime = arrivedTimeField.value
-          processes.push({ name : ++processNumber , bt : burstTime , at : arrivedTime })
-          let row = document.createElement('tr'),
-          processName = document.createElement('td'),
-          processBurstTime = document.createElement('td'),
-          processArrivedTime = document.createElement('td'),
-          progressBar = document.createElement('div'),
-          processProgress = document.createElement('td')
-
-          processName.textContent = `p${processNumber}`
-          processBurstTime.textContent = burstTime
-          processArrivedTime.textContent = arrivedTime
-          progressBar.style.width = "0%"
-          processProgress.classList.add('progress')
-          progressBar.classList.add('determinate')
-
-          processProgress.appendChild(progressBar)
-          row.appendChild(processName)
-          row.appendChild(processBurstTime)
-          row.appendChild(processArrivedTime)
-          row.appendChild(processProgress)
-          document.querySelector('tbody').appendChild(row)
-  }
-  ClearProcess = () =>{
-    processes = []
-    var myNode = document.querySelector('tbody');
-      while (myNode.firstChild) {
-          myNode.removeChild(myNode.firstChild);
-}
-  }
+<script src="assets/index.js">
 </script>
+
 </html>
