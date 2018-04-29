@@ -58,7 +58,7 @@
                     <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled = "true">Add</button>
                   </div>
                   <div class="col s4 input-field">
-                      <button class="btn btn-large red" type="submit" >Clear</button>
+                      <button class="btn btn-large red" type="submit" onclick="ClearProcess()">Clear</button>
                     </div>
                     <div class="col s4 input-field">
                         <button class="btn btn-large blue"  type="button">Start</button>
@@ -124,8 +124,13 @@
           row.appendChild(processArrivedTime)
           row.appendChild(processProgress)
           document.querySelector('tbody').appendChild(row)
-
-          
+  }
+  ClearProcess = () =>{
+    processes = []
+    var myNode = document.querySelector('tbody');
+      while (myNode.firstChild) {
+          myNode.removeChild(myNode.firstChild);
+}
   }
 </script>
 </html>
