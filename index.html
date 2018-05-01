@@ -10,6 +10,9 @@
   <title>Document</title>
 </head>
 <style>
+  body{
+    overflow: hidden;
+  }
   #content {
     position: absolute;
     top: 50%;
@@ -75,13 +78,13 @@
         </div>
         <div class="col s4">
           <div class="col s4 input-field">
-            <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled="true">Add</button>
+            <button id="addbtn" class="btn btn-large" onclick="AddProcess()" type="button" disabled="true" >Add</button> 
           </div>
           <div class="col s4 input-field">
-            <button class="btn btn-large red" type="submit" onclick="ClearProcess()">Clear</button>
+            <button class="btn btn-large red" onclick="ClearProcess()" id="clear">Clear</button>
           </div>
           <div class="col s4 input-field">
-            <button class="btn btn-large blue" type="button" onclick="StartSimulation()">Start</button>
+            <button class="btn btn-large blue" type="button" onclick="StartSimulation()" id="startbtn">Start</button>
             <!--NO IMPLEMENTATION DONE HERE FOR THIS BUTTON -->
           </div>
         </div>

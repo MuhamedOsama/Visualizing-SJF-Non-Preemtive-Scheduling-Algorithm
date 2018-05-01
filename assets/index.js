@@ -1,7 +1,7 @@
 let processes = [], WaitingProcesses = [],clock = 0,totalbt =0,processNumber=0
-const burstTimeField = document.querySelector('#burst_time'),
+let burstTimeField = document.querySelector('#burst_time'),
   arrivedTimeField = document.querySelector('#arrived_time'),
-  addbtn = document.getElementById('addbtn')
+  addbtn = document.querySelector('#addbtn')
 burstTimeField.addEventListener('input', (e) => {
   const message = document.querySelector('#burst_time_message')
 
@@ -84,8 +84,10 @@ ClearProcess = () => {
 
 
 StartSimulation = () => {
-  let first = true
-  let last = false
+  console.log('clicked')
+  startbtn = document.querySelector('#startbtn').disabled = true
+  addbtn = document.querySelector('#addbtn').disabled = true
+
   let processCounter = 0
   let dp = processes[0], running = processes[0]
   let prepare = ()=>{
@@ -120,19 +122,8 @@ StartSimulation = () => {
           console.log(unit)
           let width = dp.bt*unit
           processBox.setAttribute("style", "width:" + width + "%")
-          if(first){
-          processBox.style.marginLeft = '0.5%'
-          processBox.style.marginRight = '0.5%'
-          first = false
-          }else if(last){
-            processBox.style.marginRight = '0.5%'
-            processBox.style.marginLeft = '0.5%'
-          }else{
-            processBox.style.marginLeft  = '0.5%'
-            processBox.style.marginRight = '0.5%'
-          }
           processBox.classList.add('z-depth-3')
-         
+         processBox.style.margin="0.5%"
           processBox.style.background = RandomColor()
           processBox.style.transform = `translateX(100%)`
           processBox.style.opacity = `0`
@@ -154,7 +145,6 @@ StartSimulation = () => {
           running.progress++
       }
         clock++
-        processCounter==processes.length-1?last=true:''
         WaitingProcesses.length>0?'':clearInterval(ProcessScan)
       },1000)
 
