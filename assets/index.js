@@ -4,30 +4,40 @@ let processes = [],
   totalbt = 0,
   processNumber = 0
 let burstTimeField = document.querySelector('#burst_time'),
-  arrivedTimeField = document.querySelector('#arrived_time'),
-  addbtn = document.querySelector('#addbtn')
+  arrivedTimeField = document.querySelector('#arrived_time')
+  const warningmessage = document.querySelector('#burst_time_message'),
+   message = document.querySelector('#arrived_time_message')
+  addbtn = document.querySelector('#addbtn'),
+  startbtn = document.querySelector('#startbtn')
 burstTimeField.addEventListener('input', (e) => {
-  const message = document.querySelector('#burst_time_message')
-  if (isNaN(e.srcElement.value)) {
-    message.textContent = "Not a Number"
+  if(!arrivedTimeField.value || !burstTimeField.value){
     addbtn.disabled = true
+    startbtn.disabled=true
+    console.log("empty")
+  }else if (isNaN(e.srcElement.value)) {
+    warningmessage.textContent = "Not a Number"
+    addbtn.disabled = true
+    startbtn.disabled=true
   } else {
-    message.textContent = ''
+    warningmessage.textContent = ''
     addbtn.disabled = false
+    startbtn.disabled=false
   }
-  e.srcElement.value ? '' : addbtn.disabled = true;
 })
 arrivedTimeField.addEventListener('input', (e) => {
-  const message = document.querySelector('#arrived_time_message')
-  e.srcElement.value && isNaN(e.srcElement.value) ? message.textContent = "Not a Number" : message.textContent = ''
-  if (isNaN(e.srcElement.value)) {
-    message.textContent = "Not a Number"
-    addbtn.disabled = true
-  } else {
-    message.textContent = ''
-    addbtn.disabled = false
-  }
-  e.srcElement.value ? '' : addbtn.disabled = true
+    if(!arrivedTimeField.value || !burstTimeField.value){
+      addbtn.disabled = true
+      startbtn.disabled=true
+      console.log("empty")
+    }else if (isNaN(e.srcElement.value)) {
+      warningmessage.textContent = "Not a Number"
+      addbtn.disabled = true
+      startbtn.disabled=true
+    } else {
+      warningmessage.textContent = ''
+      addbtn.disabled = false
+      startbtn.disabled=false
+    }
 })
 AddProcess = () => {
   let current
@@ -83,8 +93,8 @@ ClearProcess = () => {
 }
 
 StartSimulation = () => {
-  startbtn = document.querySelector('#startbtn').disabled = true
-  addbtn = document.querySelector('#addbtn').disabled = true
+  startbtn.disabled = true
+  addbtn.disabled = true
   let processCounter = 0
   let dp = processes[0],
     running = processes[0]
@@ -164,6 +174,10 @@ StartSimulation = () => {
       bars.forEach((bar)=>{
         if(bar.id == running.name){
           bar.style.width = `${(running.progress/running.bt)*100}%`
+          if(running.progress==running.bt){
+            bar.style.color = "white"
+            bar.textContent = "Done"
+          }
         }
       })
     }
