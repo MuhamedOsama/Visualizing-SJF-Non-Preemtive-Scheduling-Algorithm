@@ -1,6 +1,4 @@
-let processes = [],
-arrivedProcesses,
-  processNumber = 0
+let processes = [], WaitingProcesses = [],clock = 0,totalbt =0,processNumber=0
 const burstTimeField = document.querySelector('#burst_time'),
   arrivedTimeField = document.querySelector('#arrived_time'),
   addbtn = document.getElementById('addbtn')
@@ -22,6 +20,7 @@ arrivedTimeField.addEventListener('input', (e) => {
   if (isNaN(e.srcElement.value)) {
     message.textContent = "Not a Number"
     addbtn.disabled = true
+
   } else {
     message.textContent = ''
     addbtn.disabled = false
@@ -29,14 +28,22 @@ arrivedTimeField.addEventListener('input', (e) => {
   e.srcElement.value ? '' : addbtn.disabled = true
 })
 AddProcess = () => {
+  let current
   const burstTime = burstTimeField.value,
     arrivedTime = arrivedTimeField.value
-  processes.push({
-    name: `p${++processNumber}`,
-    bt: parseInt(burstTime)*1000,
-    at: parseInt(arrivedTime),
-    progress: 1
-  })
+  if (!(burstTime.at < 0 || arrivedTime < 0)) {
+    totalbt+=parseInt(burstTime)
+    current = {
+      name: `p${++processNumber}`,
+      bt: parseInt(burstTime),
+      at: parseInt(arrivedTime),
+      progress: 0,
+      done: false
+    }
+    processes.push(current)
+  }
+
+ 
   let row = document.createElement('tr'),
     processName = document.createElement('td'),
     processBurstTime = document.createElement('td'),
@@ -48,6 +55,7 @@ AddProcess = () => {
   processBurstTime.textContent = burstTime
   processArrivedTime.textContent = arrivedTime
   progressBar.style.width = "0%"
+  progressBar.setAttribute('id', `${current.name}`)
   processProgress.classList.add('progress')
   progressBar.classList.add('determinate')
 
@@ -66,57 +74,119 @@ AddProcess = () => {
 
 }
 ClearProcess = () => {
-  processes = []
+  processes = [];
   var myNode = document.querySelector('tbody');
   while (myNode.firstChild) {
-    myNode.removeChild(myNode.firstChild);
+    myNode.removeChild(myNode.firstChild)
   }
 }
-let currentProcesses = []
+
+
+
 StartSimulation = () => {
-    let timeline = document.querySelector('#timeline')
-    
-    arrivedProcesses  = [...processes].sort((p1,p2)=>p1.at - p2.at);
-    processes.sort((p1, p2) => p1.bt - p2.bt)
-    let clock = 0
-    let run = setInterval(()=>{
-      arrivedProcesses.forEach((process)=>{
-        if(process.at==clock){
-          currentProcesses.push(process)
-          currentProcesses.sort((p1,p2) =>p1.bt-p2.bt )
-          let processBox = document.createElement('div')
-          processBox.style.backgroundColor = RandomColor()
-          processBox.classList.add('col')
-          processBox.classList.add('s1')
-          processBox.classList.add('z-depth-3')
-          processBox.style.marginRight = "5px"
-          let processNameBox = document.createElement('h5')
-          let processWaitTime = document.createElement('h6')
-          processNameBox.textContent = process.name
-          processWaitTime.textContent = `A7A`
-          processBox.appendChild(processNameBox)
-          processBox.appendChild(processWaitTime)
-          timeline.appendChild(processBox)
-        }
-      })
-      clock++
-      currentProcesses.forEach((process)=>{
-        if(process.progress!=process.bt/1000)
-        process.progress++
-      })
-    },1000)
+  let first = true
+  let last = false
+  let processCounter = 0
+  let dp = processes[0], running = processes[0]
+  let prepare = ()=>{
+    processes.forEach((process)=>{
+      if(process.at < running.at)
+      dp = process
+      running = dp
+    })
+    WaitingProcesses.push(running)
+    processes.splice(processes.findIndex(p => p.name == running.name), 1)
   }
-  RandomColor = () =>{
-    let color = ''
-    let hexa = '0123456789abcdef'
-    for(let i = 0 ; i < 6 ; i ++){
-      color += hexa[Math.floor(Math.random()*hexa.length)]
-    }
-    return `#${color}`
-  }
-
+    let ProcessScan =  setInterval (()=>{
   
+       processes.forEach((process)=>{
+          if(process.at == clock){
+            WaitingProcesses.push(process)
 
-
+          }
+        })
+  
+  
+        if(running.progress == running.bt){
+          running.done = true
+          processCounter ++
+          dp = WaitingProcesses.shift()
+          WaitingProcesses.sort((p1,p2) => p1.bt-p2.bt)
+          running = WaitingProcesses[0]
+          let processBox = document.createElement('div')
+          
+          processBox.classList.add('col')
+          let unit = (100-(processes.length))/totalbt
+          console.log(unit)
+          let width = dp.bt*unit
+          processBox.setAttribute("style", "width:" + width + "%")
+          if(first){
+          processBox.style.marginLeft = '0.5%'
+          processBox.style.marginRight = '0.5%'
+          first = false
+          }else if(last){
+            processBox.style.marginRight = '0.5%'
+            processBox.style.marginLeft = '0.5%'
+          }else{
+            processBox.style.marginLeft  = '0.5%'
+            processBox.style.marginRight = '0.5%'
+          }
+          processBox.classList.add('z-depth-3')
          
-      
+          processBox.style.background = RandomColor()
+          processBox.style.transform = `translateX(100%)`
+          processBox.style.opacity = `0`
+          
+          let processNameBox = document.createElement('h5')   
+          processNameBox.textContent = dp.name
+          processBox.appendChild(processNameBox)
+            timeline.appendChild(processBox)
+            let x = 200
+            let y = 0
+          let scaler = setInterval(() => {
+            processBox.style.transform = `translateX(${--x}%)`
+            if(y<1){
+              processBox.style.opacity = `${y+=0.004}`
+            }
+            x ==0 ? clearInterval(scaler) : ""
+          }, 1)
+        }else{
+          running.progress++
+      }
+        clock++
+        processCounter==processes.length-1?last=true:''
+        WaitingProcesses.length>0?'':clearInterval(ProcessScan)
+      },1000)
+
+}
+
+
+RandomColor = () => {
+  let color = ''
+  let hexa = '0123456789abcdef'
+  for (let i = 0; i < 6; i++) {
+    color += hexa[Math.floor(Math.random() * hexa.length)]
+  }
+  return `#${color}`
+}
+
+
+
+
+
+
+/*
+ let processBox = document.createElement('div')
+    processBox.style.backgroundColor = RandomColor()
+    processBox.classList.add('col')
+    processBox.classList.add('s1')
+    processBox.classList.add('z-depth-3')
+    processBox.style.marginRight = "5px"
+    let processNameBox = document.createElement('h5')
+    let processWaitTime = document.createElement('h6')
+    processNameBox.textContent = currentprocess.name
+    console.log(currentprocess)
+    processBox.appendChild(processNameBox)
+    processBox.appendChild(processWaitTime)
+    timeline.appendChild(processBox)
+    */
