@@ -109,7 +109,8 @@ StartSimulation = () => {
   }
   let ProcessScan = setInterval(() => {
     processes.forEach((process) => {
-      if (process.at == clock) {
+      
+      if (clock == process.at) {
         WaitingProcesses.push(process)
         let processBox = document.createElement('div')
         processBox.classList.add('col')
@@ -182,7 +183,7 @@ StartSimulation = () => {
       })
     }
     clock++
-    WaitingProcesses.length > 0 ? '' : clearInterval(ProcessScan)
+    WaitingProcesses.length >= 0 ? '' : clearInterval(ProcessScan)
   }, 1000)
 
 }
