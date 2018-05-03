@@ -41,7 +41,7 @@ AddProcess = () => {
   let current
   const burstTime = burstTimeField.value,
     arrivedTime = arrivedTimeField.value
-  if (!(burstTime.burstTime < 0 || arrivedTime < 0)) {
+  if (!(burstTime < 0 || arrivedTime < 0)) {
     totalbt += parseInt(burstTime)
     current = {
       name: `p${++processNumber}`,
@@ -100,7 +100,7 @@ ClearProcess = () => {
         let processBox = document.createElement('div')
         processBox.classList.add('col')
         let unit = (100 - (processes.length)) / totalbt
-        let width = WaitingProcesses[0].burstTime * unit
+        let width = process.burstTime * unit
         processBox.setAttribute("style", "width:" + width + "%")
         processBox.id = process.name
         processBox.classList.add('z-depth-3')
